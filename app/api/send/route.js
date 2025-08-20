@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import ContactFormEmail from '../../../components/emails/ContactFormEmail';
 
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
@@ -14,20 +13,13 @@ export async function POST(req) {
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact Form <onboarding@resend.dev>',
-
-     to: 'sujalkoshtawork@gmail.com', 
-       subject: `New Portfolio Message: ${reason}`,
-
-   
+      from: 'Portfolio Contact Form <onboarding@resend.dev>', 
+      to: 'sujalkoshtawork@gmail.com',
+      subject: `New Portfolio Message: ${reason}`,
       reply_to: email,
 
-   
-      react: ContactFormEmail({
-        senderEmail: email,
-        reason: reason,
-        message: message,
-      }),
+      // ✅ FIXED: use JSX, not a function call
+      react: <ContactFormEmail senderEmail={email} reason={reason} message={message} />,
     });
 
     if (error) {
@@ -42,3 +34,4 @@ export async function POST(req) {
     return NextResponse.json({ error: 'An unexpected error occurred.' }, { status: 500 });
   }
 }
+
