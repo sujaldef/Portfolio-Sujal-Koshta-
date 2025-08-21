@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import './globals.css'; // Your global styles
 
 export const metadata = {
-  title: 'Sujal Koshta | Full-Stack Developer & AI Enthusiast',
+  title: 'Sujal Koshta | Portfolio',
   description: 'The professional portfolio of Sujal Koshta, showcasing projects in React, Next.js, AI/ML, and more.',
 };
 
