@@ -17,9 +17,9 @@ export async function POST(req) {
       to: 'sujalkoshtawork@gmail.com',
       subject: `New Portfolio Message: ${reason}`,
       reply_to: email,
-
-      // ✅ FIXED: use JSX, not a function call
-      react: <ContactFormEmail senderEmail={email} reason={reason} message={message} />,
+  html: `<p><strong>Email:</strong> ${email}</p>
+         <p><strong>Reason:</strong> ${reason}</p>
+         <p><strong>Message:</strong> ${message}</p>`
     });
 
     if (error) {
