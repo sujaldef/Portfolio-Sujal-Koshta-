@@ -13,6 +13,34 @@
   --primary-light: #0a0317; /* Lighter shade for hover effects */
    --backgroundoppo: linear-gradient(190deg, #0a0a0a, #0f0624);
 }
+:root {
+  --primary: #131145; /* Very dark purple */
+  --bg: #0a0a0a;      /* Near-black background */
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #26225f;
+}
+
+/* Firefox */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg);
+}
 
 html, body {
   min-height: 100%;

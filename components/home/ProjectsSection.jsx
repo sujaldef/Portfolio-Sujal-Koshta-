@@ -141,7 +141,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-[#11071F] to-[#190D2E] border border-slate-700/50 rounded-2xl shadow-2xl flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="p-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto  custom-scroll">
             <button
               onClick={onClose}
               className="absolute top-6 right-6 text-slate-400 hover:text-white transition z-20"
