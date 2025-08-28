@@ -286,62 +286,67 @@ const HeroSection = () => {
           </div>
 
           {/* RIGHT: Image with the new animated card effect */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={inView ? { scale: 1, opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          >
-            <div className="card-effect">
-              <div className="background"></div>
-              <div className="logo-wrapper">
-                <Image
-                  src="/img3.jpg"
-                  alt="Sujal Koshta"
-                  width={450}
-                  height={450}
-                  quality={100}
-                  className="logo"
-                  priority
-                />
-              </div>
-
-              <a 
-  href="https://www.linkedin.com/in/sujalkoshta" 
-  target="_blank" 
-  rel="noreferrer" 
-  className="box box1"
+         <motion.div
+  initial={{ scale: 0.9, opacity: 0 }}
+  animate={inView ? { scale: 1, opacity: 1 } : {}}
+  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
 >
-  <span className="icon-box">
-    <FaLinkedin />
-  </span>
-</a>
+  <div className="card-effect">
+    <div className="background"></div>
+    <div className="logo-wrapper">
+      <Image
+        src="/img3.jpg"
+        alt="Sujal Koshta"
+        width={450}
+        height={450}
+        quality={100}
+        className="logo"
+        priority
+      />
+    </div>
 
-<a 
-  href="https://github.com/sujaldef" 
-  target="_blank" 
-  rel="noreferrer" 
-  className="box box2"
->
-  <span className="icon-box">
-    <FaGithub />
-  </span>
-</a>
+    {/* Social links */}
+    <a
+      href="https://www.linkedin.com/in/sujalkoshta"
+      target="_blank"
+      rel="noreferrer"
+      className="box box1"
+    >
+      <span className="icon-box">
+        <FaLinkedin />
+      </span>
+    </a>
 
-<a 
-  href="https://www.instagram.com/sujal_kht" 
-  target="_blank" 
-  rel="noreferrer" 
-  className="box box3"
->
-  <span className="icon-box">
-    <FaInstagram />
-  </span>
-</a>
+    <a
+      href="https://github.com/sujaldef"
+      target="_blank"
+      rel="noreferrer"
+      className="box box2"
+    >
+      <span className="icon-box">
+        <FaGithub />
+      </span>
+    </a>
 
-             
-            </div>
-          </motion.div>
-        </motion.div>
+    <a
+      href="https://www.instagram.com/sujal_kht"
+      target="_blank"
+      rel="noreferrer"
+      className="box box3"
+    >
+      <span className="icon-box">
+        <FaInstagram />
+      </span>
+    </a>
+  </div>
+
+  {/* 👇 Hint Text */}
+  <p className="text-center mt-2 text-sm text-gray-400">
+    Hover over the card to see my social links
+  </p>
+</motion.div>
+</motion.div>
+
       </section>
     </>
   );
