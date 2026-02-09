@@ -1,266 +1,204 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronLeft, FaChevronRight, FaTimes, FaGithub } from 'react-icons/fa';
-import { projectsData } from '../../lib/data';
+import React, { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { GoArrowUpRight } from "react-icons/go";
+import { FaBuilding, FaCheckCircle } from "react-icons/fa";
+import { projectsData, experienceData } from "../../lib/data";
 
-
-const CardImageSlider = ({ images }) => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
-    }, 3500); // Change image every 2 seconds
-
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  return (
-    <>
-      <AnimatePresence initial={false}>
-        <motion.div
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={`/projects/${images[index]}`}
-            alt={`Project preview ${index + 1}`}
-            fill
-            className="object-cover object-top"
-            quality={100}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </motion.div>
-      </AnimatePresence>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, i) => (
-          <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i === index ? 'bg-white' : 'bg-white/50'}`}></div>
-        ))}
-      </div>
-    </>
-  );
-};
-
-// --- Modal Slideshow Component with Smoother Animation ---
-const ModalImageSlider = ({ images, projectTitle }) => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  const next = () => setIndex((prev) => (prev + 1) % images.length);
-  const prev = () => setIndex((prev) => (prev - 1 + images.length) % images.length);
-
-  return (
-    <div className="relative w-full aspect-video bg-black/30 rounded-lg overflow-hidden">
-      <AnimatePresence initial={false} mode="wait">
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: 100 }} // Slide in from the right
-          animate={{ opacity: 1, x: 0 }} // Slide to center
-          exit={{ opacity: 0, x: -100 }} // Slide out to the left
-          transition={{
-            duration: 0.6,
-            ease: [0.43, 0.13, 0.23, 0.96], // Custom easing for smooth motion (easeOutBack-like)
-          }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={`/projects/${images[index]}`}
-            alt={`${projectTitle} screenshot ${index + 1}`}
-            fill
-            className="object-contain"
-            quality={100}
-            sizes="100vw"
-          />
-        </motion.div>
-      </AnimatePresence>
-      <button
-        onClick={prev}
-        className="absolute top-1/2 left-3 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black/70 transition z-10"
-      >
-        <FaChevronLeft />
-      </button>
-      <button
-        onClick={next}
-        className="absolute top-1/2 right-3 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black/70 transition z-10"
-      >
-        <FaChevronRight />
-      </button>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, i) => (
-          <div
-            key={i}
-            onClick={() => setIndex(i)}
-            className={`w-2 h-2 rounded-full cursor-pointer transition-colors ${i === index ? 'bg-white' : 'bg-white/50'}`}
-          ></div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// --- The "Executive" Project Modal ---
-const ProjectModal = ({ project, isOpen, onClose }) => {
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
-
-  if (!isOpen || !project) return null;
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 50, opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-[#11071F] to-[#190D2E] border border-slate-700/50 rounded-2xl shadow-2xl flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="p-6 overflow-y-auto  custom-scroll">
-            <button
-              onClick={onClose}
-              className="absolute top-6 right-6 text-slate-400 hover:text-white transition z-20"
-            >
-              <FaTimes size={24} />
-            </button>
-            <div className="w-full mb-6">
-              <ModalImageSlider images={project.images} projectTitle={project.title} />
-            </div>
-            <div className="text-white space-y-6">
-              <h3 className="text-3xl lg:text-4xl font-bold">{project.title}</h3>
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map((tech) => (
-                  <span
-                    key={tech}
-                    className="bg-[var(--primary)]/20 text-xs px-3 py-1 rounded-full text-[var(--primary)] font-medium"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-                <div className="md:col-span-3 space-y-4">
-                  <h4 className="text-lg font-semibold text-slate-200">Key Features</h4>
-                  <ul className="list-disc list-inside text-slate-400 space-y-1.5">
-                    {project.details.map((detail, i) => (
-                      <li key={i}>{detail}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="md:col-span-2 space-y-4">
-                  <h4 className="text-lg font-semibold text-slate-200">Project Impact</h4>
-                  <p className="text-slate-400">{project.impact}</p>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 bg-[var(--primary)] text-white px-6 py-2 rounded-lg hover:bg-[var(--primary)]/80 transition-all duration-300 transform hover:scale-105"
-                  >
-                    <FaGithub /> View on GitHub
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
-};
-
-// --- The NEW Project Card with Hover Slideshow ---
-const ProjectCard = ({ project, onOpenModal }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className="group relative aspect-video rounded-xl overflow-hidden border border-slate-800/50 shadow-lg cursor-pointer"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => onOpenModal(project)}
-    >
-      <CardImageSlider images={project.images} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-      <div className="absolute inset-0 p-6 flex flex-col justify-end">
-        <h3 className="text-xl font-bold text-white mb-1">{project.title}</h3>
-        <p className="text-sm text-slate-300 mb-4">{project.shortDescription}</p>
-      </div>
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <span className="bg-[var(--primary)] text-white px-6 py-3 rounded-lg font-semibold transform group-hover:scale-105 transition-transform">
-          View Details
-        </span>
-      </div>
-    </motion.div>
-  );
-};
-
-// --- Main ProjectsSection Component ---
 const ProjectsSection = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
-
-  const openModal = (project) => {
-    setSelectedProject(project);
-    document.body.style.overflow = 'hidden';
-  };
-  const closeModal = () => {
-    setSelectedProject(null);
-    document.body.style.overflow = 'auto';
-  };
-
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <h2 className="text-center text-4xl font-semibold mb-4">
-        My Work
-        </h2>
-        <p className="max-w-3xl mx-auto mb-12 text-[var(--text-muted)] text-center leading-relaxed">
-          A showcase of my capabilities in creating modern, scalable, and user-friendly web applications.
-        </p>
-      </motion.div>
+    <section className="bg-[#2a0a10] text-[#E8D8C4] w-full border-t border-[#C7B7A3]/10">
+      
+      {/* --- PART 1: THE HERO EXPERIENCE (INTERNSHIP) --- */}
+      <div className="w-full bg-[#2a0a10] relative overflow-hidden">
+        {/* Subtle Background Branding */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#E8D8C4]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        {projectsData.map((project, i) => (
-          <ProjectCard key={project.title} project={project} onOpenModal={openModal} />
-        ))}
+        <div className="max-w-[1400px] mx-auto px-6 py-24">
+            
+            {/* Header */}
+            <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 gap-6">
+                <div>
+                    <span className="text-[#C7B7A3] font-mono text-sm tracking-widest uppercase mb-2 block">Professional Experience</span>
+                    <h2 className="text-4xl md:text-6xl font-serif text-[#E8D8C4]">
+                        Engineering <br />
+                        <span className="italic opacity-70">at Scale.</span>
+                    </h2>
+                </div>
+                <div className="md:max-w-xs text-right">
+                    <p className="text-[#C7B7A3]/80 text-sm leading-relaxed">
+                        Deploying production-grade applications for industry leaders.
+                    </p>
+                </div>
+            </div>
+
+            {/* The Experience Block */}
+            {experienceData.map((exp, i) => (
+                <div key={i} className="w-full border border-[#C7B7A3]/20 rounded-3xl p-8 md:p-12 bg-[#2a0a10] relative overflow-hidden group">
+                    
+                    {/* Decorative Background */}
+                    <div className="absolute inset-0 bg-[#C7B7A3]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    
+                    {/* Company Header */}
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between mb-12 border-b border-[#C7B7A3]/10 pb-8">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 rounded-xl bg-[#E8D8C4] text-[#2a0a10] flex items-center justify-center text-3xl">
+                                <FaBuilding />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold text-[#E8D8C4]">{exp.company}</h3>
+                                <p className="text-[#C7B7A3]">{exp.role}</p>
+                            </div>
+                        </div>
+                        <div className="mt-4 md:mt-0 flex gap-4 text-xs font-mono text-[#C7B7A3]/60 uppercase tracking-widest">
+                            <span>{exp.period}</span>
+                            <span>•</span>
+                            <span>{exp.location}</span>
+                        </div>
+                    </div>
+
+                    {/* The Two Projects Grid */}
+                    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {exp.projects.map((proj, idx) => (
+                            <HeroProjectCard key={idx} project={proj} />
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
       </div>
 
-      <ProjectModal project={selectedProject} isOpen={!!selectedProject} onClose={closeModal} />
+      {/* --- PART 2: SELECTED PERSONAL WORKS --- */}
+      <div className="w-full py-24">
+        <div className="max-w-[1400px] mx-auto px-6 mb-20 flex flex-col items-center">
+            <motion.div 
+              initial={{ rotate: 0 }}
+              whileInView={{ rotate: 180 }}
+              transition={{ duration: 1 }}
+              className="mb-4 text-[#C7B7A3]"
+            >
+               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor"/>
+               </svg>
+            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-medium uppercase tracking-tight text-[#E8D8C4]">Personal Projects</h2>
+        </div>
+
+        <div className="w-full border-t border-[#C7B7A3]/20">
+            {projectsData.map((project, i) => (
+               <ProjectItem key={i} project={project} index={i} />
+            ))}
+        </div>
+      </div>
+
     </section>
   );
 };
+
+// --- SUB-COMPONENT: Hero/Internship Project Card ---
+const HeroProjectCard = ({ project }) => {
+    return (
+        <div className="bg-[#1a0508] border border-[#C7B7A3]/10 rounded-2xl p-8 hover:border-[#C7B7A3]/40 transition-all duration-300 hover:-translate-y-1 group/card">
+            <div className="flex justify-between items-start mb-6">
+                <div>
+                    <span className="text-[#E8D8C4] text-xs font-bold uppercase tracking-wider bg-[#C7B7A3]/10 px-3 py-1 rounded-full">
+                        {project.type}
+                    </span>
+                    <h4 className="text-2xl font-serif text-[#E8D8C4] mt-4 group-hover/card:underline decoration-[#C7B7A3]/50 underline-offset-4">
+                        {project.title}
+                    </h4>
+                </div>
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-[#C7B7A3]/10 text-[#E8D8C4] hover:bg-[#E8D8C4] hover:text-[#2a0a10] transition-colors">
+                    <GoArrowUpRight size={20} />
+                </a>
+            </div>
+            
+            <p className="text-[#C7B7A3]/80 text-sm mb-6 leading-relaxed">
+                {project.details}
+            </p>
+
+            <div className="mb-6 p-4 bg-[#2a0a10] rounded-xl border border-[#C7B7A3]/5">
+                <div className="flex gap-2 items-start">
+                    <FaCheckCircle className="text-[#E8D8C4] mt-1 shrink-0" size={14} />
+                    <p className="text-xs text-[#E8D8C4]/90 italic">"{project.impact}"</p>
+                </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+                {project.tech.map((t, i) => (
+                    <span key={i} className="text-[10px] text-[#C7B7A3] border border-[#C7B7A3]/20 px-2 py-1 rounded uppercase tracking-wider">
+                        {t}
+                    </span>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// --- SUB-COMPONENT: Standard List Item (Existing) ---
+const ProjectItem = ({ project, index }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <div 
+            className="group w-full border-b border-[#C7B7A3]/20 relative overflow-hidden bg-[#2a0a10]"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 min-h-[400px] md:h-[450px]">
+                
+                {/* Info */}
+                <div className="p-8 md:p-12 flex flex-col justify-between border-r border-[#C7B7A3]/20 relative z-10 transition-colors duration-500 group-hover:bg-[#C7B7A3]/5">
+                    <div className="space-y-6">
+                        <div>
+                           <p className="text-[#C7B7A3] text-xs uppercase tracking-widest mb-2">0{index + 1} / {project.location}</p>
+                           <h3 className="text-3xl md:text-4xl font-medium text-[#E8D8C4]">
+                               {project.title}
+                           </h3>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-8 pt-4">
+                             <div>
+                                 <p className="text-[#C7B7A3] text-xs uppercase tracking-widest mb-2">Tech Stack</p>
+                                 <p className="text-sm font-light text-[#E8D8C4]/80">{project.tech.slice(0, 3).join(" • ")}</p>
+                             </div>
+                             <div>
+                                 <p className="text-[#C7B7A3] text-xs uppercase tracking-widest mb-2">Description</p>
+                                 <p className="text-sm font-light text-[#E8D8C4]/80">{project.shortDescription}</p>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end mt-12 md:mt-0">
+                         <a href={project.link} target="_blank" rel="noopener noreferrer" className={`w-14 h-14 rounded-full border border-[#C7B7A3]/40 flex items-center justify-center transition-all duration-500 ${isHovered ? 'bg-[#E8D8C4] scale-110 border-[#E8D8C4]' : 'bg-transparent'}`}>
+                             <GoArrowUpRight className={`text-xl transition-colors duration-500 ${isHovered ? 'text-[#2a0a10]' : 'text-[#E8D8C4]'}`} />
+                         </a>
+                    </div>
+                </div>
+
+                {/* Image Reveal */}
+                <div className="relative h-full w-full overflow-hidden bg-[#22080d]">
+                    <div className="absolute inset-0 p-12 flex items-center justify-center">
+                        <motion.div 
+                            className="relative w-full h-full shadow-2xl overflow-hidden rounded-lg"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                             <Image 
+                                src={`/projects/${project.images[0]}`}
+                                alt={project.title}
+                                fill
+                                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                             />
+                        </motion.div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+}
 
 export default ProjectsSection;
