@@ -312,7 +312,7 @@ const ClosingSection = () => {
   };
 
   return (
-    <section id="contact" className="relative w-full min-h-screen bg-[#2a0a10] px-6 lg:px-8 border-t border-[#C7B7A3]/10 flex items-center justify-center py-20 overflow-hidden">
+    <section id="closing" className="relative w-full min-h-screen bg-[#2a0a10] px-6 lg:px-8 border-t border-[#C7B7A3]/10 flex items-center justify-center py-20 overflow-hidden">
       
       {/* Background FX */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#E8D8C4] rounded-full blur-[200px] opacity-[0.03] pointer-events-none" />
@@ -404,7 +404,7 @@ const ClosingSection = () => {
 
             {/* 2. THE RESUME BOX (Rectangular, below form) */}
             <motion.a
-                href="/resume.pdf"
+                href="/Sujal_koshta_resume.pdf"
                 download="Sujal_Koshta_Resume"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
