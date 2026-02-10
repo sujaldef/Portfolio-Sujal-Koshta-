@@ -56,18 +56,24 @@ const RevealText = ({ children, delay = 0, className }) => {
 };
 
 // --- 2. Main Hero Component ---
-
 const HeroSection = () => {
   const containerRef = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // Parallax Effects
+  const handleScroll = () => {
+    document
+      .getElementById("closing")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const yText = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const yImage = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const rotateImage = useTransform(scrollYProgress, [0, 1], [0, -10]);
+
 
   // Mouse Follower Logic
   const mouse = { x: useSpring(0, { stiffness: 50, damping: 20 }), y: useSpring(0, { stiffness: 50, damping: 20 }) };
@@ -85,8 +91,8 @@ const HeroSection = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative w-full min-h-screen bg-[#2a0a10] text-[#E8D8C4] flex items-center justify-center overflow-hidden"
-    >
+      className="relative w-full min-h-screen bg-[#2a0a10] text-[#E8D8C4] flex items-center justify-center"
+      >
       
       {/* --- A. DYNAMIC BACKGROUND --- */}
       
@@ -140,16 +146,27 @@ const HeroSection = () => {
             
             {/* CTA Button */}
             <RevealText delay={0.5} className="mt-4 md:mt-0">
-              <Magnetic>
-                <button className="w-36 h-36 rounded-full bg-[#E8D8C4] text-[#2a0a10] flex flex-col items-center justify-center gap-2 group relative overflow-hidden">
-                  {/* Hover Fill Effect */}
-                  <div className="absolute inset-0 bg-[#C7B7A3] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-                  
-                  <span className="relative z-10 text-sm font-bold uppercase tracking-wide">Let's Talk</span>
-                  <FaArrowRight className="relative z-10 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                </button>
-              </Magnetic>
-            </RevealText>
+            <button
+  onClick={handleScroll}
+  className="w-36 h-36 rounded-full bg-[#E8D8C4] text-[#2a0a10]
+             flex flex-col items-center justify-center gap-2
+             group relative overflow-hidden"
+>
+  <div className="absolute inset-0 bg-[#C7B7A3]" />
+
+  <span className="relative z-10 text-sm font-bold uppercase tracking-wide">
+    Let's Talk
+  </span>
+
+  <FaArrowRight
+    className="relative z-10 group-hover:rotate-75
+               transition-transform duration-800 ease-out"
+  />
+</button>
+
+</RevealText>
+
+
           </div>
 
           {/* Socials */}
