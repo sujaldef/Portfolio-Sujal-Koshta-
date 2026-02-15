@@ -19,7 +19,7 @@ export const metadata = {
     siteName: 'Sujal Koshta',
     images: [
       {
-        url: 'https://your-domain.vercel.app/og.png', // MUST be absolute
+        url: './og.png', // MUST be absolute
         width: 1200,
         height: 630,
         alt: 'Sujal Koshta Portfolio Preview',
