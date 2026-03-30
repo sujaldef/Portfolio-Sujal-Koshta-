@@ -44,12 +44,12 @@ const ProjectsInteractive = () => {
               <span className="text-[#C7B7A3] font-mono text-sm tracking-widest uppercase">
                 Recent Internship
               </span>
-              <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-xs font-medium uppercase tracking-wider">
-                 recent
+              <span className="px-3 py-1 bg-[#C7B7A3]/10 border border-[#C7B7A3]/30 rounded-full text-[#C7B7A3] text-xs font-medium uppercase tracking-wider">
+                Current
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-serif text-[#E8D8C4]">
-              <span className="text-red-500">Via Zenvoyager</span> @ Hero
+              <span className="text-[#C7B7A3]">Via Zenvoyager</span> @ Hero
               MotoCorp
             </h2>
             <p className="text-[#C7B7A3]/70 text-sm mt-2 font-mono">
@@ -78,12 +78,12 @@ const ProjectsInteractive = () => {
               <span className="text-[#C7B7A3] font-mono text-sm tracking-widest uppercase">
                 First Internship
               </span>
-              <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-xs font-medium uppercase tracking-wider">
-                 Foundation
+              <span className="px-3 py-1 bg-[#C7B7A3]/10 border border-[#C7B7A3]/30 rounded-full text-[#C7B7A3] text-xs font-medium uppercase tracking-wider">
+                Foundation
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-serif text-[#E8D8C4]">
-              <span className="text-blue-400">47billion</span>
+              <span className="text-[#C7B7A3]">47billion</span>
             </h2>
             <p className="text-[#C7B7A3]/70 text-sm mt-2 font-mono">
               Apr 15, 2025 – May 15, 2025
@@ -166,8 +166,8 @@ const FeaturedCard = ({ project, onClick }) => {
       <div className="relative h-[250px] w-full overflow-hidden">
         {/* Live Project Badge */}
         {project.isLiveProject && (
-          <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-green-500/90 rounded-full text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1 shadow-lg">
-            <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>{' '}
+          <div className="absolute top-4 right-4 z-10 px-3 py-1.5 bg-[#150406]/90 rounded-full text-[#E8D8C4] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border border-[#E8D8C4]/55 shadow-[0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-sm">
+            <span className="w-2 h-2 bg-[#E8D8C4] rounded-full animate-pulse shadow-[0_0_8px_rgba(232,216,196,0.8)]"></span>{' '}
             Live
           </div>
         )}
@@ -202,7 +202,7 @@ const FeaturedCard = ({ project, onClick }) => {
           {project.shortDescription}
         </p>
         <div className="flex items-center gap-2 text-xs font-mono text-[#E8D8C4] bg-[#2a0a10] p-3 rounded-lg border border-[#C7B7A3]/10">
-          <FaCheckCircle className="text-green-500/50" />
+          <FaCheckCircle className="text-[#C7B7A3]/60" />
           <span>{project.impact.substring(0, 60)}...</span>
         </div>
 
