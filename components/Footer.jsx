@@ -14,7 +14,7 @@ const Footer = () => {
                 © {currentYear} Sujal Koshta.
              </p>
              <p className="text-xs text-slate-400 mt-1 flex items-center gap-1 justify-center md:justify-start">
-                Built with <FaHeart className="text-red-400" size={10} /> in React & Tailwind.
+                Built with <FaHeart className="text-red-400" size={10} /> in next.
              </p>
         </div>
 

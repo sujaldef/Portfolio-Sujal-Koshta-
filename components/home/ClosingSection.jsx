@@ -302,15 +302,30 @@ const ClosingSection = () => {
 
   const handleChange = (e) => setFormState({ ...formState, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("sending");
-    setTimeout(() => {
+  
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formState.email,
+          message: formState.message,
+        }),
+      });
+  
+      if (!res.ok) throw new Error("Request failed");
+  
       setStatus("success");
       setFormState({ name: "", email: "", message: "" });
-    }, 1200);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
-
+  
   return (
     <section id="closing" className="relative w-full min-h-screen bg-[#2a0a10] px-6 lg:px-8 border-t border-[#C7B7A3]/10 flex items-center justify-center py-20 overflow-hidden">
       
