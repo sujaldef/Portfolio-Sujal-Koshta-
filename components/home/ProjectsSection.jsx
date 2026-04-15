@@ -13,6 +13,18 @@ import {
 } from 'react-icons/fa';
 import { projectsData } from '../../lib/data';
 
+const resolveImageSrc = (image) =>
+  typeof image === 'string' ? image : image?.src || '';
+
+const isPortraitImage = (image) => {
+  if (typeof image === 'object' && image?.format) {
+    return image.format === 'mobile';
+  }
+
+  const imageName = resolveImageSrc(image).toLowerCase();
+  return imageName.includes('phone') || imageName.includes('mobile');
+};
+
 const ProjectsInteractive = () => {
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -156,6 +168,8 @@ const ProjectsInteractive = () => {
 
 // --- COMPONENT 1: Featured Card (For Hero Projects) ---
 const FeaturedCard = ({ project, onClick }) => {
+  const firstImage = resolveImageSrc(project.images[0]);
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -172,7 +186,7 @@ const FeaturedCard = ({ project, onClick }) => {
           </div>
         )}
         <Image
-          src={`/projects/${project.images[0]}`}
+          src={`/projects/${firstImage}`}
           alt={project.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -217,6 +231,8 @@ const FeaturedCard = ({ project, onClick }) => {
 
 // --- COMPONENT 2: Standard Card (For Personal Projects) ---
 const StandardCard = ({ project, onClick }) => {
+  const firstImage = resolveImageSrc(project.images[0]);
+
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -225,7 +241,7 @@ const StandardCard = ({ project, onClick }) => {
     >
       <div className="relative aspect-video w-full bg-[#000]">
         <Image
-          src={`/projects/${project.images[0]}`}
+          src={`/projects/${firstImage}`}
           alt={project.title}
           fill
           className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
@@ -319,6 +335,32 @@ const ProjectDrawerContent = ({ project, onClose }) => {
             <p className="text-[#E8D8C4]/90 text-lg leading-relaxed">
               {project.shortDescription}
             </p>
+
+            {project.collaboration && (
+              <div className="p-4 bg-[#2a0a10] rounded-xl border border-[#C7B7A3]/10">
+                <h4 className="text-xs font-bold text-[#C7B7A3] uppercase tracking-wider mb-2">
+                  Collaboration
+                </h4>
+                <p className="text-[#E8D8C4]/85 text-sm leading-relaxed">
+                  {project.collaboration.summary}
+                </p>
+                {project.collaboration.members?.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.collaboration.members.map((member) => (
+                      <a
+                        key={member.name}
+                        href={member.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#C7B7A3]/30 text-[#E8D8C4] text-xs hover:border-[#E8D8C4] transition-colors"
+                      >
+                        <FaGithub /> {member.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4">
@@ -419,13 +461,21 @@ const ProjectDrawerContent = ({ project, onClose }) => {
               {project.images.map((img, i) => (
                 <div
                   key={i}
-                  className="relative w-full aspect-video rounded-xl overflow-hidden border border-[#C7B7A3]/20 shadow-2xl group"
+                  className={`relative w-full rounded-xl overflow-hidden border border-[#C7B7A3]/20 shadow-2xl group ${
+                    isPortraitImage(img)
+                      ? 'aspect-[9/16] max-w-[360px] mx-auto bg-[#120407]'
+                      : 'aspect-video'
+                  }`}
                 >
                   <Image
-                    src={`/projects/${img}`}
+                    src={`/projects/${resolveImageSrc(img)}`}
                     alt={`Gallery ${i}`}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={`transition-transform duration-700 group-hover:scale-105 ${
+                      isPortraitImage(img)
+                        ? 'object-contain bg-[#120407]'
+                        : 'object-cover'
+                    }`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <span className="text-white text-xs font-mono">
