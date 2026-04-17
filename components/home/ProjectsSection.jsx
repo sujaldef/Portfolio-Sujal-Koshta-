@@ -166,7 +166,7 @@ const ProjectsInteractive = () => {
   );
 };
 
-// --- COMPONENT 1: Featured Card (For Hero Projects) ---
+// --- COMPONENT 1: Featured Card   (For Hero Projects) ---
 const FeaturedCard = ({ project, onClick }) => {
   const firstImage = resolveImageSrc(project.images[0]);
 
