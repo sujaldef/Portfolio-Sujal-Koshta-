@@ -136,7 +136,7 @@ const ProjectsInteractive = () => {
         </div>
       </div>
 
-      {/* --- SHARED: Right Slide Drawer (Modal) --- */}
+      {/* --- SHARED: Right Slide Drawer (Modal)  --- */}
       <AnimatePresence>
         {selectedProject && (
           <>
